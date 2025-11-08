@@ -1,10 +1,10 @@
-from connexion import FlaskJSONEncoder
+from flask.json import JSONEncoder as BaseJSONEncoder
 import six
 
 from openapi_server.models.base_model_ import Model
 
 
-class JSONEncoder(FlaskJSONEncoder):
+class JSONEncoder(BaseJSONEncoder):
     include_nulls = False
 
     def default(self, o):
@@ -17,4 +17,4 @@ class JSONEncoder(FlaskJSONEncoder):
                 attr = o.attribute_map[attr]
                 dikt[attr] = value
             return dikt
-        return FlaskJSONEncoder.default(self, o)
+        return BaseJSONEncoder.default(self, o)
