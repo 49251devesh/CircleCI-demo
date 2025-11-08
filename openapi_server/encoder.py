@@ -1,7 +1,13 @@
-from flask.json import JSONEncoder as BaseJSONEncoder
+import json
 import six
-
 from openapi_server.models.base_model_ import Model
+
+try:
+    # Flask 2.x still provides this
+    from flask.json import JSONEncoder as BaseJSONEncoder
+except ImportError:
+    # Flask 3.x removed it → use Python’s built-in encoder
+    from json import JSONEncoder as BaseJSONEncoder
 
 
 class JSONEncoder(BaseJSONEncoder):
@@ -17,4 +23,8 @@ class JSONEncoder(BaseJSONEncoder):
                 attr = o.attribute_map[attr]
                 dikt[attr] = value
             return dikt
-        return BaseJSONEncoder.default(self, o)
+        # fall back to the parent implementation
+        try:
+            return super().default(o)
+        except TypeError:
+            return str(o)
