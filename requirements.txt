@@ -1,4 +1,4 @@
-connexion>=3.0.0
+connexion==2.14.1
 flask==2.3.3
 pytest~=7.1.3
 pytest-cov>=2.8.1
