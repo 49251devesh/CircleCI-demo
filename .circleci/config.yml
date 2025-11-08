@@ -16,18 +16,22 @@ jobs:
       - checkout
 
       - run:
+          name: Clean pip cache (before install)
+          command: |
+            pip cache purge || true
+            rm -rf ~/.cache/pip || true
+
+      - run:
           name: Upgrade pip
           command: pip install --upgrade pip
 
       - run:
-          name: Install dependencies
-          command: pip install -r requirements.txt
-          
-      - run:
-          name: Clean pip cache
-          command: |
-            pip cache purge || true
+          name: Install dependencies (fresh)
+          command: pip install --no-cache-dir -r requirements.txt
 
+      - run:
+          name: Verify Flask version
+          command: python -m pip show flask
 
       - run:
           name: Run tests
