@@ -15,23 +15,22 @@ jobs:
     steps:
       - checkout
 
-      - run:
-          name: Clean pip cache (before install)
-          command: |
-            pip cache purge || true
-            rm -rf ~/.cache/pip || true
+     - run:
+    name: Clean pip cache
+    command: |
+      pip cache purge || true
+      rm -rf ~/.cache/pip || true
+      pip uninstall -y flask connexion werkzeug || true
 
-      - run:
-          name: Upgrade pip
-          command: pip install --upgrade pip
+- run:
+    name: Install dependencies (fresh)
+    command: pip install --no-cache-dir -r requirements.txt
 
-      - run:
-          name: Install dependencies (fresh)
-          command: pip install --no-cache-dir -r requirements.txt
-
-      - run:
-          name: Verify Flask version
-          command: python -m pip show flask
+- run:
+    name: Verify versions
+    command: |
+      python -m pip show flask
+      python -m pip show connexion
 
       - run:
           name: Run tests
